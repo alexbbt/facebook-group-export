@@ -1,6 +1,6 @@
 {
   "name": "facebook-group-export",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Export all members from a facebook group.",
   "main": "bin/index.js",
   "bin": {

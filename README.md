@@ -31,7 +31,7 @@ npm install facebook-group-export --global
 
 ### Export data from Facebook.
 
-To access your data through the Facebook API, Facebook requires you to use an access token. This must be included when you run `facebook-export`. The easiest way I've found is to grab one from Facebook's API explorer https://developers.facebook.com/tools/explorer
+To access your data through the Facebook API, Facebook requires you to use an access token. This must be included when you run `facebook-group-export`. The easiest way I've found is to grab one from Facebook's API explorer https://developers.facebook.com/tools/explorer
 
 There click on the "Get Access Token" button and make sure you check the "user_managed_groups" data permission. Once you've approved this app, copy the long random alphanumeric Access Token. We'll use it next to export your Facebook data.
 
