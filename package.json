@@ -1,0 +1,27 @@
+{
+  "name": "facebook-group-export",
+  "version": "1.0.0",
+  "description": "Export all members from a facebook group.",
+  "main": "bin/index.js",
+  "bin": {
+    "facebook-group-export": "./bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexbbt/facebook-group-export.git"
+  },
+  "author": "Alexander Bell-Towne <code@bell-towne.com> (https://github.com/alexbbt)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexbbt/facebook-group-export/issues"
+  },
+  "homepage": "https://github.com/alexbbt/facebook-group-export#readme",
+  "dependencies": {
+    "cli-table": "^0.3.1",
+    "colors": "^1.1.2",
+    "commander-plus": "0.0.6",
+    "fs-promise": "^1.0.0",
+    "request": "^2.78.0",
+    "request-promise": "^4.1.1"
+  }
+}
