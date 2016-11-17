@@ -178,8 +178,9 @@ const save = function() {
 	})
 
 	return Promise.all(promises)
-		.then(() => {
-			process.stdout.write("All Data writen to " + (__dirname + "/" + paramaters.file).green + "\n");
+		.then(() => fsp.realpath(paramaters.file))
+		.then((path) => {
+			process.stdout.write("All Data writen to " + path.green + "\n");
 			return rows;
 		});
 }
