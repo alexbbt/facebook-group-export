@@ -2,6 +2,11 @@
   "name": "facebook-group-export",
   "version": "1.0.2",
   "description": "Export all members from a facebook group.",
+  "scripts": {
+    "build": "babel src --presets babel-preset-es2015 --out-dir bin",
+    "prepare": "npm run build",
+    "test": "make test"
+  },
   "main": "bin/index.js",
   "bin": {
     "facebook-group-export": "./bin/index.js"
@@ -23,5 +28,10 @@
     "fs-promise": "^1.0.0",
     "request": "^2.78.0",
     "request-promise": "^4.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^4.1.1"
   }
 }

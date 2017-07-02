@@ -4,38 +4,37 @@
 const pkg     = require("../package.json");
 const program = require("commander-plus");
 const Table   = require("cli-table");
-const colors  = require("colors");
 const rp      = require("request-promise");
 const fsp     = require("fs-promise");
 
 
 const main = function() {
-	const chain = Promise.resolve()
-	.then(setup)
-	.then(process_options)
-	.then(run)
-	.then(save)
-	.catch((err) => {
-		process.stdin.destroy();
-		process.stdout.write("Error\n".red);
+	Promise.resolve()
+		.then(setup)
+		.then(process_options)
+		.then(run)
+		.then(save)
+		.catch((err) => {
+			process.stdin.destroy();
+			process.stdout.write("Error\n".red);
 
-		if (err.error) {
-			console.error(JSON.parse(err.error).error.message);
-		} else {
-			console.error(err);
-		}
-		return false;
-	})
+			if (err.error) {
+				console.error(JSON.parse(err.error).error.message);
+			} else {
+				console.error(err);
+			}
+			return false;
+		})
 	// done
-	.then(display_results)
-	.then(() => {
-		process.stdout.write("\n");
-	})
-	.catch((err) => {
-		process.stdin.destroy();
-		console.error(err);
-	})
-}
+		.then(display_results)
+		.then(() => {
+			process.stdout.write("\n");
+		})
+		.catch((err) => {
+			process.stdin.destroy();
+			console.error(err);
+		});
+};
 
 const setup = function() {
 	program
@@ -45,14 +44,14 @@ const setup = function() {
 		.option("-g, --groupId [id]","ID for group to export")
 		.option("-f, --file [path]","File to store data in")
 		.parse(process.argv);
-}
+};
 
 const process_options = function() {
 	const paramaters = {
 		accessToken: null,
 		groupId: null,
 		file: null,
-		list: false
+		list: false,
 	};
 
 	if (program.args.length > 0) {
@@ -70,29 +69,29 @@ const process_options = function() {
 	paramaters.list = (program.list === true);
 
 	return paramaters;
-}
+};
 
 const run = function(paramaters) {
 	if (!(
-			paramaters.accessToken !== null
+		paramaters.accessToken !== null
 			&& (
-				paramaters.list
+			paramaters.list
 				|| paramaters.groupId !== null
-			)
+		)
 	)) {
-		program.help()
+		program.help();
 		throw "Missing Required Paramaters.";
 	}
 
 	process.stdout.write("\n");
 
 	if (paramaters.list) {
-		return list_groups(paramaters)
+		return list_groups(paramaters);
 	} else if (paramaters.groupId) {
-		return export_group(paramaters)
+		return export_group(paramaters);
 	}
 
-}
+};
 
 const list_groups = function(paramaters) {
 	if (!paramaters.list) {
@@ -100,7 +99,7 @@ const list_groups = function(paramaters) {
 	}
 
 	return next_loop(paramaters, "https://graph.facebook.com/v2.8/me/groups?fields=name%2Cadministrator");
-}
+};
 
 const export_group = function(paramaters) {
 	if (paramaters.groupId === null) {
@@ -108,11 +107,11 @@ const export_group = function(paramaters) {
 	}
 
 	return next_loop(paramaters, "https://graph.facebook.com/v2.8/" + paramaters.groupId + "/members?fields=id%2Cfirst_name%2Cmiddle_name%2Clast_name%2Cadministrator");
-}
+};
 
 const next_loop = function(paramaters, url, rows, page = 1) {
 	if (!url.includes(paramaters.accessToken)) {
-		url += "&access_token=" + paramaters.accessToken
+		url += "&access_token=" + paramaters.accessToken;
 	}
 
 	if (rows == null) {
@@ -120,36 +119,36 @@ const next_loop = function(paramaters, url, rows, page = 1) {
 	}
 
 	return rp(url)
-	.then((data) => JSON.parse(data))
-	.then((results) => {
-		var paging = results.paging;
-		results.data.forEach((result) => {
-			rows.push(result);
-		});
+		.then((data) => JSON.parse(data))
+		.then((results) => {
+			var paging = results.paging;
+			results.data.forEach((result) => {
+				rows.push(result);
+			});
 
-		if (paging && paging.next) {
+			if (paging && paging.next) {
 
-			if (page === 1) {
-				process.stdout.write("More than 25 Results, Paging is required." + "\n");
-				process.stdout.write("This could take a very long time for large groups." + "\n");
-				process.stdout.write("Hit " + "Control-C".red + " to quit." + "\n");
-				process.stdout.write("\n");
+				if (page === 1) {
+					process.stdout.write("More than 25 Results, Paging is required." + "\n");
+					process.stdout.write("This could take a very long time for large groups." + "\n");
+					process.stdout.write("Hit " + "Control-C".red + " to quit." + "\n");
+					process.stdout.write("\n");
+				}
+
+				process.stdout.clearLine();
+				process.stdout.cursorTo(0);
+				process.stdout.write("Pages Queried: " + page.toString().green + ", Results Found: " + rows.length.toString().green);
+
+				return next_loop(paramaters, paging.next, rows, page + 1);
 			}
 
-			process.stdout.clearLine();
-			process.stdout.cursorTo(0);
-			process.stdout.write("Pages Queried: " + page.toString().green + ", Results Found: " + rows.length.toString().green);
+			if (rows.length > 25) {
+				process.stdout.write("\n" + "\n");
+			}
 
-			return next_loop(paramaters, paging.next, rows, page + 1);
-		}
-
-		if (rows.length > 25) {
-			process.stdout.write("\n" + "\n");
-		}
-
-		return [rows, paramaters];
-	})
-}
+			return [rows, paramaters];
+		});
+};
 
 const save = function() {
 
@@ -163,7 +162,7 @@ const save = function() {
 	var keys = Object.keys(rows[0]);
 
 	var promises = [
-		fsp.writeFile(paramaters.file, keys.join(",") + "\n")
+		fsp.writeFile(paramaters.file, keys.join(",") + "\n"),
 	];
 
 	rows.forEach((row) => {
@@ -171,11 +170,11 @@ const save = function() {
 			fsp.appendFile(
 				paramaters.file,
 				keys.map((key) => {
-					return row[key]
+					return row[key];
 				}).join(",") + "\n"
 			)
 		);
-	})
+	});
 
 	return Promise.all(promises)
 		.then(() => fsp.realpath(paramaters.file))
@@ -183,7 +182,7 @@ const save = function() {
 			process.stdout.write("All Data writen to " + path.green + "\n");
 			return rows;
 		});
-}
+};
 
 const display_results = function(rows) {
 	if (!rows) {
@@ -213,9 +212,9 @@ const display_results = function(rows) {
 		head: keys,
 		colWidths: keys.map(key => maxWidthByKey[key] + 2),
 		chars: {"mid": "", "left-mid": "", "mid-mid": "", "right-mid": ""},
-		style: {head: ["white"], border: ["white"]}
+		style: {head: ["white"], border: ["white"]},
 
-	}
+	};
 
 	var table = new Table(options);
 	rows.forEach((row) => {
@@ -230,7 +229,7 @@ const display_results = function(rows) {
 	// Print table.
 	process.stdout.write(table.toString() + "\n");
 
-}
+};
 
 
 main();
