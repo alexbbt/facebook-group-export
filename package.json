@@ -4,8 +4,7 @@
   "description": "Export all members from a facebook group.",
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir bin",
-    "prepare": "npm run build",
-    "test": "make test"
+    "prepare": "npm run build"
   },
   "main": "bin/index.js",
   "bin": {
