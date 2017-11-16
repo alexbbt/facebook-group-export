@@ -1,6 +1,6 @@
 {
   "name": "facebook-group-export",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Export all members from a facebook group.",
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir bin",
