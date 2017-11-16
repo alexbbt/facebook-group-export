@@ -8,28 +8,37 @@ Well you are in luck, Use `facebook-group-export` to list your groups, then pick
 
 ## Installation
 
+This will install facebook-group-export as a global command which you can run.
+
 ``` bash
-npm install facebook-group-export --global
+npm install --global facebook-group-export
 ```
 
 ## Usage
 
-```
+``` text
 
-  Usage: index.js [options]
+  Usage: facebook-group-export <ACCESS-TOKEN> [options]
 
   Options:
 
-    -h, --help                 output usage information
-    -V, --version              output the version number
-    -a, --accessToken <token>  Access Token for Open Graph Required
-    -l, --list                 List Facebook Groups
-    -g, --groupId [id]         ID for group to export
-    -f, --file [path]          File to store data in
+    -V, --version       output the version number
+    -l, --list          List Facebook Groups
+    -g, --groupId [id]  ID for group to export
+    -f, --file [path]   File to store data in
+    -h, --help          output usage information
+
+  Examples:
+
+    facebook-group-export <ACCESS-TOKEN> -l
+    facebook-group-export <ACCESS-TOKEN> -l -f ./path/file.csv
+
+    facebook-group-export <ACCESS-TOKEN> -g <GROUP-ID>
+    facebook-group-export <ACCESS-TOKEN> -g <GROUP-ID> -f ./path/file.csv
 
 ```
 
-### Export data from Facebook.
+### Export data from Facebook
 
 To access your data through the Facebook API, Facebook requires you to use an access token. This must be included when you run `facebook-group-export`. The easiest way I've found is to grab one from Facebook's API explorer https://developers.facebook.com/tools/explorer
 
@@ -39,14 +48,14 @@ There click on the "Get Access Token" button and make sure you check the "user_m
 
 You need to know the Group ID of the group you wish to export data from. To see a list of all your groups and their Group IDs run:
 
-`facebook-group-export -a <YOUR-ACCESS-TOKEN> -l`
+`facebook-group-export <YOUR-ACCESS-TOKEN> -l`
 
 This will return a list of the Facebook groups you manage.
 Copy the id from the group you want to export.
 
 To export the members run
 
-`facebook-group-export -a <ACCESS-TOKEN> -g <GROUP-ID>`
+`facebook-group-export <ACCESS-TOKEN> -g <GROUP-ID>`
 
 ### Save to CSV
 

@@ -38,6 +38,6 @@ module.exports = {
             },
         ],
         "comma-dangle": ["error", "always-multiline"],
-        "no-console": "allow",
+        "no-console": 0,
     }
 };

@@ -2,11 +2,12 @@
 "use strict";
 
 const pkg     = require("../package.json");
-const program = require("commander-plus");
+const program = require("commander");
 const Table   = require("cli-table");
 const rp      = require("request-promise");
 const fsp     = require("fs-promise");
 
+require("colors");
 
 const main = function() {
 	Promise.resolve()
@@ -39,11 +40,28 @@ const main = function() {
 const setup = function() {
 	program
 		.version(pkg.version)
-		.option("-a, --accessToken <token>","Access Token for Open Graph" + " Required".red)
+		.arguments("<ACCESS-TOKEN>")
+		.action(function(token) {
+			program.token = token;
+		})
+		.usage('<ACCESS-TOKEN> [options]')
 		.option("-l, --list","List Facebook Groups")
 		.option("-g, --groupId [id]","ID for group to export")
 		.option("-f, --file [path]","File to store data in")
 		.parse(process.argv);
+
+	program.on("--help", function(){
+		console.log("");
+		console.log("");
+		console.log("  Examples:");
+		console.log("");
+		console.log("    facebook-group-export <ACCESS-TOKEN> -l");
+		console.log("    facebook-group-export <ACCESS-TOKEN> -l -f ./path/file.csv");
+		console.log("");
+		console.log("    facebook-group-export <ACCESS-TOKEN> -g <GROUP-ID>");
+		console.log("    facebook-group-export <ACCESS-TOKEN> -g <GROUP-ID> -f ./path/file.csv");
+		console.log("");
+	});
 };
 
 const process_options = function() {
@@ -54,16 +72,7 @@ const process_options = function() {
 		list: false,
 	};
 
-	if (program.args.length > 0) {
-
-		paramaters.urls = [];
-		for (var i = 0; i < program.args.length; i++) {
-
-			paramaters.urls.push(program.args[i]);
-		}
-
-	}
-	if (program.accessToken !== undefined) paramaters.accessToken = program.accessToken;
+	if (program.token !== undefined) paramaters.accessToken = program.token;
 	if (program.groupId !== undefined) paramaters.groupId = program.groupId;
 	if (program.file !== undefined) paramaters.file = program.file;
 	paramaters.list = (program.list === true);
@@ -193,7 +202,7 @@ const display_results = function(rows) {
 			process.stdout.write("\n" + "Displaying Administrators".green + "\n");
 			display_results(rows.filter(row => row.administrator));
 		}
-		process.stdout.write("\n" + "Displaying First 50 rows".green + "\n");
+		process.stdout.write("\n" + "Displaying First 50 rows".green + " (Export to file to see all members)\n");
 		rows = rows.splice(0, 50);
 	}
 	const keys = Object.keys(rows[0]);
