@@ -1,4 +1,6 @@
-# Facebook Group Export
+# DEPRECATED Facebook Group Export
+
+This project is deprecated because the Facebook API has been deprecated
 
 [![NPM](https://nodei.co/npm/facebook-group-export.png?compact=true)](https://nodei.co/npm/facebook-group-export/)
 
